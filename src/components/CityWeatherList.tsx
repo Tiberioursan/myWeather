@@ -1,7 +1,8 @@
 import React from 'react'
 import { StyleSheet, ScrollView, Text } from 'react-native'
+import { CityWeatherListProps } from '../types/weatherInterfaces'
 
-const CityWeatherList: React.FC = () => {
+const CityWeatherList: React.FC<CityWeatherListProps> = ({ location }) => {
 
     return (
         <ScrollView horizontal contentContainerStyle={styles.container}>
