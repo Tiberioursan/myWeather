@@ -13,6 +13,7 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ cityData }) => {
         >
             {cityData.isYourLocation && <Text style={styles.yourLocationText}>Your location:</Text>}
             <View style={styles.textContainer}>
+                <Text style={[styles.text, isPressed && styles.textPressed, styles.cityName]}>{cityData.cityName}</Text>
                 <Text style={[styles.text, isPressed && styles.textPressed, styles.temperature]}>{cityData.weather?.temperature}°C</Text>
             </View>
         </TouchableOpacity>
@@ -53,9 +54,13 @@ const styles = StyleSheet.create({
         fontSize: 10,
         marginBottom: 15,
     },
+    cityName: {
+        flex: 1,
+        textAlign: 'left',
+    },
     temperature: {
         flex: 1,
-        textAlign: 'center',
+        textAlign: 'right',
     },
 });
 
