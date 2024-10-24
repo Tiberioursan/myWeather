@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { StyleSheet, ScrollView, Text } from 'react-native'
 import { CityWeatherListProps, CityData } from '../types/weatherInterfaces'
 import { getWeatherByLocation } from '../api/weatherRequests'
+import WeatherCard from './WeatherCard'
 
 const CityWeatherList: React.FC<CityWeatherListProps> = ({ location }) => {
     const [currentLocation, setCurrentLocation] = useState<CityData | null>(null)
@@ -20,7 +21,7 @@ const CityWeatherList: React.FC<CityWeatherListProps> = ({ location }) => {
     useEffect(() => {
         const getCurrentLocation = async () => {
             const weather = await getCurrentPositionWeather(location.latitude, location.longitude)
-            setCurrentLocation({ location, weather })
+            setCurrentLocation({ location, weather, isYourLocation: true })
         }
 
         getCurrentLocation()
@@ -29,7 +30,7 @@ const CityWeatherList: React.FC<CityWeatherListProps> = ({ location }) => {
     return (
         <ScrollView horizontal contentContainerStyle={styles.container}>
             {error && <Text>{error}</Text>}
-            {currentLocation && <Text>{currentLocation.weather?.temperature}</Text>}
+            {currentLocation && <WeatherCard cityData={currentLocation} />}
         </ScrollView>
     )
 }

@@ -16,6 +16,11 @@ export interface WeatherData {
 
 export interface CityData {
     location: Location,
-    weather: WeatherData | null
+    weather: WeatherData | null,
+    isYourLocation: boolean
+}
+
+export interface WeatherCardProps {
+    cityData: CityData
 }
 
