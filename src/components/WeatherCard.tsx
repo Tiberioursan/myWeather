@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { WeatherCardProps } from '../types/weatherInterfaces'
+import WeatherIcon from './WeatherIcon'
 
 const WeatherCard: React.FC<WeatherCardProps> = ({ cityData }) => {
     const [isPressed, setIsPressed] = useState<boolean>(false)
@@ -12,10 +13,11 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ cityData }) => {
             onPressOut={() => setIsPressed(false)}
         >
             {cityData.isYourLocation && <Text style={styles.yourLocationText}>Your location:</Text>}
-            <View style={styles.textContainer}>
-                <Text style={[styles.text, isPressed && styles.textPressed, styles.cityName]}>{cityData.cityName}</Text>
-                <Text style={[styles.text, isPressed && styles.textPressed, styles.temperature]}>{cityData.weather?.temperature}°C</Text>
-            </View>
+                <View style={styles.textContainer}>
+                    <Text style={[styles.text, isPressed && styles.textPressed, styles.cityName]}>{cityData.cityName}</Text>
+                    <WeatherIcon iconCode={cityData.weather?.weatherSymbolCode || ''} />
+                    <Text style={[styles.text, isPressed && styles.textPressed, styles.temperature]}>{cityData.weather?.temperature}°C</Text>
+                </View>
         </TouchableOpacity>
     )
 }

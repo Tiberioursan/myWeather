@@ -25,3 +25,7 @@ export interface WeatherCardProps {
     cityData: CityData
 }
 
+export interface WeatherIconProps {
+    iconCode: string
+}
+
