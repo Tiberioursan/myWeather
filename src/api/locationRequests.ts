@@ -10,3 +10,24 @@ export const getLocationName = async (latitude: number, longitude: number) => {
         return ''
     }
 }
+
+export const getGeoCoordinatesByCityName = async (cityName: string) => {
+    const url = `https://nominatim.openstreetmap.org/search?q=${cityName}&format=json&limit=1`
+
+    try {
+        const response = await fetch(
+            url,
+            {
+                headers: {
+                    'User-Agent': 'weatherApp/1.0 (tiberioursan@gmail.com)'
+                }
+            }
+        )
+        const locationData = await response.json()
+        console.log('locationData:', locationData[0])
+        return locationData[0]
+    } catch (error) {
+        console.error('Error fetching coordinates:', error)
+        return null
+    }
+}

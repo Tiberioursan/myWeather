@@ -22,7 +22,8 @@ export interface CityData {
 }
 
 export interface WeatherCardProps {
-    cityData: CityData
+    cityData: CityData,
+    reloadStoredLocations: () => Promise<void>
 }
 
 export interface WeatherIconProps {

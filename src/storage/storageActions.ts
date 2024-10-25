@@ -28,3 +28,14 @@ export const addLocation = async (newCity: CityData) => {
     const updatedCities = [...cities, newCity]
     await storeAllLocations(updatedCities)
 }
+
+export const removeLocation = async (cityName: string) => {
+    try {
+        const jsonValue = await AsyncStorage.getItem(STORAGE_KEY)
+        const storedCities: CityData[] = jsonValue ? JSON.parse(jsonValue) : []
+        const updatedCities = storedCities.filter(city => city.cityName !== cityName)
+        await storeAllLocations(updatedCities)
+    } catch (error) {
+        console.error('Error removing city:', error)
+    }
+};
