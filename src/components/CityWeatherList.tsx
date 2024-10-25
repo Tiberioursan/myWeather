@@ -1,49 +1,23 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { StyleSheet, ScrollView, Text } from 'react-native'
-import { CityWeatherListProps, CityData } from '../types/weatherInterfaces'
-import { getWeatherByLocation } from '../api/weatherRequests'
-import { getLocationName } from '../api/locationRequests'
+import { CityWeatherListProps } from '../types/weatherInterfaces'
 import WeatherCard from './WeatherCard'
+import useCurrentLocationWeather from '../hooks/useCurrentLocationWeather'
+import useSavedLocationsWeather from '../hooks/useStoredLocationsWeather'
 
 const CityWeatherList: React.FC<CityWeatherListProps> = ({ location }) => {
-    const [currentLocation, setCurrentLocation] = useState<CityData | null>(null)
-    const [error, setError] = useState<string | null>(null)
+    const { currentLocation, error: currentLocationError } = useCurrentLocationWeather(location)
+    const { savedLocationsWeather, error: savedLocationsError } = useSavedLocationsWeather()
 
-    const getCurrentPositionWeather = async (latitude: number, longitude: number) => {
-        try {
-            const data = await getWeatherByLocation(latitude, longitude)
-            return data
-        } catch (error) {
-            setError('Error getting location')
-            return null
-        }
-    }
-
-    useEffect(() => {
-        const getCurrentLocation = async () => {
-
-            const getCurrentPositionCityName = async () => {
-                try {
-                    const cityName = await getLocationName(location.latitude, location.longitude)
-                    return cityName
-                } catch (error) {
-                    setError('Error getting location')
-                    return ''
-                }
-            }
-
-            const cityName = await getCurrentPositionCityName()
-            const weather = await getCurrentPositionWeather(location.latitude, location.longitude)
-            setCurrentLocation({ cityName, location, weather, isYourLocation: true })
-        }
-
-        getCurrentLocation()
-    }, [location])
+    const error = currentLocationError || savedLocationsError
 
     return (
         <ScrollView horizontal contentContainerStyle={styles.container}>
             {error && <Text>{error}</Text>}
             {currentLocation && <WeatherCard cityData={currentLocation} />}
+            {savedLocationsWeather.map((location, index) => (
+                <WeatherCard key={`${location.cityName}-${index}`} cityData={location} />
+            ))}
         </ScrollView>
     )
 }
