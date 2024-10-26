@@ -43,7 +43,6 @@ const CityWeatherList: React.FC<CityWeatherListProps> = ({ location }) => {
             }
 
             const coordinates = { latitude: parseFloat(response.lat), longitude: parseFloat(response.lon) }
-            console.log('coordinates:', coordinates)
 
             const capitalizedCityName = newCityName
                 .toLowerCase()

@@ -24,10 +24,22 @@ export const getGeoCoordinatesByCityName = async (cityName: string) => {
             }
         )
         const locationData = await response.json()
-        console.log('locationData:', locationData[0])
         return locationData[0]
     } catch (error) {
         console.error('Error fetching coordinates:', error)
         return null
+    }
+}
+
+export const getTimeZoneByCoordinates = async (latitude: number, longitude: number) => {
+    const API_KEY = 'F0XGFMRK0GY6'
+    const url = `http://api.timezonedb.com/v2.1/get-time-zone?key=${API_KEY}&format=json&by=position&lat=${latitude}&lng=${longitude}`
+    try {
+        const response = await fetch(url)
+        const data = await response.json()
+        return data.gmtOffset / 3600
+    } catch (error) {
+        console.error('Error fetching local time:', error)
+        return ''
     }
 }

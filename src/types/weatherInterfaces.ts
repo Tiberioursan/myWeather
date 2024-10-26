@@ -31,3 +31,7 @@ export interface WeatherIconProps {
     size: 'small' | 'big'
 }
 
+export interface TimeDisplayProps {
+    latitude: number
+    longitude: number
+}

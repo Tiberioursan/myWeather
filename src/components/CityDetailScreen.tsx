@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import WeatherIcon from './WeatherIcon'
+import CityDateAndTime from './CityDateAndTime'
 import { getSunEventsByLocation } from '../api/weatherRequests'
 import { CityDetailRouteParams } from '../types/navigationTypes'
 
@@ -11,10 +12,14 @@ const DetailScreen = ({ route }: { route: CityDetailRouteParams }) => {
 
     useEffect(() => {
         const fetchSunEvents = async (): Promise<void> => {
-            const location = cityData.location
-            const sunEvents = await getSunEventsByLocation(location.latitude, location.longitude)
-            setSunriseTime(sunEvents.sunriseTime)
-            setSunsetTime(sunEvents.sunsetTime)
+            try {
+                const location = cityData.location
+                const sunEvents = await getSunEventsByLocation(location.latitude, location.longitude)
+                setSunriseTime(sunEvents.sunriseTime)
+                setSunsetTime(sunEvents.sunsetTime)
+            } catch (error) {
+                console.error('Failed to fetch sun events:', error)
+            }
         }
 
         fetchSunEvents()
@@ -22,6 +27,7 @@ const DetailScreen = ({ route }: { route: CityDetailRouteParams }) => {
 
     return (
         <View style={styles.container}>
+            <CityDateAndTime latitude={cityData.location.latitude} longitude={cityData.location.longitude} />
             <Text style={styles.cityName}>{cityData.cityName}</Text>
             <WeatherIcon iconCode={cityData.weather?.weatherSymbolCode || ''} size={'big'} />
             <Text style={styles.temperature}>{`${cityData.weather?.temperature}°C`}</Text>
@@ -64,7 +70,6 @@ const styles = StyleSheet.create({
         fontSize: 36,
         fontWeight: 'bold',
         marginBottom: 30,
-        marginTop: 50,
     },
     temperature: {
         fontSize: 40,
