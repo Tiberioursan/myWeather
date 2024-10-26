@@ -27,6 +27,7 @@ export interface WeatherCardProps {
 }
 
 export interface WeatherIconProps {
-    iconCode: string
+    iconCode: string,
+    size: 'small' | 'big'
 }
 

@@ -69,7 +69,7 @@ const CityWeatherList: React.FC<CityWeatherListProps> = ({ location }) => {
     }
 
     return (
-        <ScrollView horizontal contentContainerStyle={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
             {error && <Text>{error}</Text>}
             {currentLocation &&
                 <WeatherCard

@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
+import { useNavigation, NavigationProp } from '@react-navigation/native'
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import { WeatherCardProps } from '../types/weatherInterfaces'
+import { RootStackParamList } from '../types/navigationTypes'
 import WeatherIcon from './WeatherIcon'
 import { removeLocation } from '../storage/storageActions'
 
 const WeatherCard: React.FC<WeatherCardProps> = ({ cityData, reloadStoredLocations }) => {
     const [isPressed, setIsPressed] = useState<boolean>(false)
     const [isLongPressed, setIsLongPressed] = useState<boolean>(false)
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>()
 
     const handleLongPress = () => {
         setIsLongPressed(true)
@@ -15,6 +18,10 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ cityData, reloadStoredLocatio
     const handleRemoveCity = async () => {
         await removeLocation(cityData.cityName)
         reloadStoredLocations()
+    }
+
+    const handlePress = () => {
+        navigation.navigate('CityDetail', { cityData })
     }
 
     return (
@@ -29,11 +36,12 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ cityData, reloadStoredLocatio
             onPressOut={() => setIsPressed(false)}
             onLongPress={handleLongPress}
             delayLongPress={400}
+            onPress={handlePress}
         >
             {cityData.isYourLocation && <Text style={styles.yourLocationText}>Your location:</Text>}
             <View style={styles.textContainer}>
                 <Text style={[styles.text, isPressed && styles.textPressed, styles.cityName]}>{cityData.cityName}</Text>
-                <WeatherIcon iconCode={cityData.weather?.weatherSymbolCode || ''} />
+                <WeatherIcon iconCode={cityData.weather?.weatherSymbolCode || ''} size='small' />
                 <Text style={[styles.text, isPressed && styles.textPressed, styles.temperature]}>{cityData.weather?.temperature}°C</Text>
                 {isLongPressed && (
                     <TouchableOpacity style={styles.removeButton} onPress={handleRemoveCity}>
