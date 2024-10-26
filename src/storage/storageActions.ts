@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { CityData } from '../types/weatherInterfaces'
 import { locationsList } from './locationsStorage'
+import { showErrorToast } from '../errors/toastService'
 
 const STORAGE_KEY = '@cities_key'
 
@@ -9,24 +10,37 @@ export const storeAllLocations = async (cities: CityData[]) => {
         const jsonValue = JSON.stringify(cities)
         await AsyncStorage.setItem(STORAGE_KEY, jsonValue)
     } catch (error) {
-        console.error('Error saving cities:', error)
+        showErrorToast('Failed to store cities')
     }
 }
 
-export const getAllLocations = async (): Promise<CityData[]> => {
+export const getAllLocations = async () => {
     try {
         const jsonValue = await AsyncStorage.getItem(STORAGE_KEY)
-        return jsonValue != null ? JSON.parse(jsonValue) : locationsList
+        const data = jsonValue ? JSON.parse(jsonValue) : locationsList
+        return { data, error: null }
     } catch (error) {
-        console.error('Error retrieving cities:', error)
-        return locationsList
+        return { data: locationsList, error: 'Error fetching saved locations' }
     }
 }
 
 export const addLocation = async (newCity: CityData) => {
-    const cities = await getAllLocations()
-    const updatedCities = [...cities, newCity]
-    await storeAllLocations(updatedCities)
+    try {
+        const { data: cities, error: getLocationsError } = await getAllLocations()
+        if (getLocationsError) {
+            showErrorToast('Failed to add city')
+            return
+        }
+        const exists = cities.some((city: CityData) => city.cityName === newCity.cityName);
+        if (exists) {
+            showErrorToast('City already exists')
+            return
+        }
+        const updatedCities = [...cities, newCity]
+        await storeAllLocations(updatedCities)
+    } catch (error) {
+        showErrorToast('Failed to add city')
+    }
 }
 
 export const removeLocation = async (cityName: string) => {
@@ -36,6 +50,6 @@ export const removeLocation = async (cityName: string) => {
         const updatedCities = storedCities.filter(city => city.cityName !== cityName)
         await storeAllLocations(updatedCities)
     } catch (error) {
-        console.error('Error removing city:', error)
+        showErrorToast('Failed to remove city')
     }
-};
+}

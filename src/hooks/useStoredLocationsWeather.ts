@@ -8,19 +8,29 @@ const useStoredLocationsWeather = () => {
     const [error, setError] = useState<string | null>(null)
 
     const fetchStoredLocationsWeather = async () => {
-        try {
-            const savedLocations = await getAllLocations()
-            console.log('savedLocations:', savedLocations)
-            const locationsWithWeather = await Promise.all(
-                savedLocations.map(async (city) => {
-                    const weather = await getWeatherByLocation(city.location.latitude, city.location.longitude)
-                    return { ...city, weather }
-                })
-            )
-            setStoredLocations(locationsWithWeather)
-        } catch (err) {
-            setError('Error fetching saved locations weather')
+        setError(null)
+        
+        const { data: savedLocations, error: locationsError } = await getAllLocations()
+
+        if (locationsError) {
+            setError(locationsError)
+            console.error('Error fetching saved locationssssssssssssssss:', locationsError)
+            return
         }
+
+        const locationsWithWeather = await Promise.all(
+            savedLocations.map(async (city: CityData) => {
+                const { weather, error: weatherError } = await getWeatherByLocation(city.location.latitude, city.location.longitude)
+                if (weatherError) {
+                    setError(weatherError)
+                    console.error('Error fetching weather:', weatherError)
+                    return city
+                }
+                return { ...city, weather }
+            })
+        )
+
+        setStoredLocations(locationsWithWeather)
     }
 
     const reloadStoredLocations = () => {

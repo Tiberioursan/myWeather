@@ -9,13 +9,19 @@ const useCurrentLocationWeather = (location: Location) => {
 
     useEffect(() => {
         const fetchCurrentLocation = async () => {
-            try {
-                const cityName = await getLocationName(location.latitude, location.longitude)
-                const weather = await getWeatherByLocation(location.latitude, location.longitude)
-                setCurrentLocation({ cityName, location, weather, isYourLocation: true })
-            } catch (err) {
-                setError('Error fetching current location weather')
+            setError(null)
+            
+            const { cityName, error: cityNameError } = await getLocationName(location.latitude, location.longitude)
+            
+            const { weather, error: weatherError } = await getWeatherByLocation(location.latitude, location.longitude)
+            
+            if (cityNameError || weatherError) {
+                const errorText = `${cityNameError || ''} ${weatherError || ''}`
+                setError(errorText)
+                return
             }
+
+            setCurrentLocation({ cityName, location, weather, isYourLocation: true })
         }
         fetchCurrentLocation()
     }, [location])

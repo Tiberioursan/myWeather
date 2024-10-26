@@ -35,3 +35,26 @@ export interface TimeDisplayProps {
     latitude: number
     longitude: number
 }
+
+export interface GeoCoordinatesResponse {
+    data?: {
+        lat: string;
+        lon: string;
+    } | null;
+    error?: string | null;
+}
+
+export interface WeatherByLocationResponse {
+    weather: WeatherData | null,
+    error?: string | null
+}
+
+export interface LocationNameResponse {
+    cityName: string;
+    error: string | null;
+}
+
+export interface TimeZoneResponse {
+    offset: number | null;
+    error: string | null;
+}

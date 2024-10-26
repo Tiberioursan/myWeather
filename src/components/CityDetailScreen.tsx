@@ -4,6 +4,7 @@ import WeatherIcon from './WeatherIcon'
 import CityDateAndTime from './CityDateAndTime'
 import { getSunEventsByLocation } from '../api/weatherRequests'
 import { CityDetailRouteParams } from '../types/navigationTypes'
+import { showErrorToast } from '../errors/toastService'
 
 const DetailScreen = ({ route }: { route: CityDetailRouteParams }) => {
     const { cityData } = route.params
@@ -12,14 +13,18 @@ const DetailScreen = ({ route }: { route: CityDetailRouteParams }) => {
 
     useEffect(() => {
         const fetchSunEvents = async (): Promise<void> => {
-            try {
-                const location = cityData.location
-                const sunEvents = await getSunEventsByLocation(location.latitude, location.longitude)
-                setSunriseTime(sunEvents.sunriseTime)
-                setSunsetTime(sunEvents.sunsetTime)
-            } catch (error) {
-                console.error('Failed to fetch sun events:', error)
+            const location = cityData.location
+            const sunEvents = await getSunEventsByLocation(
+                location.latitude,
+                location.longitude
+            )
+
+            if (sunEvents.error) {
+                showErrorToast(sunEvents.error)
+                return
             }
+            setSunriseTime(sunEvents.sunriseTime)
+            setSunsetTime(sunEvents.sunsetTime)
         }
 
         fetchSunEvents()

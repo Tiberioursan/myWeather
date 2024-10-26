@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import {
     StyleSheet,
     ScrollView,
@@ -14,6 +14,7 @@ import useCurrentLocationWeather from '../hooks/useCurrentLocationWeather'
 import useStoredLocationsWeather from '../hooks/useStoredLocationsWeather'
 import { getGeoCoordinatesByCityName } from '../api/locationRequests'
 import { addLocation } from '../storage/storageActions'
+import { showErrorToast } from '../errors/toastService'
 
 const CityWeatherList: React.FC<CityWeatherListProps> = ({ location }) => {
     const { currentLocation, error: currentLocationError } = useCurrentLocationWeather(location)
@@ -28,48 +29,50 @@ const CityWeatherList: React.FC<CityWeatherListProps> = ({ location }) => {
     }
     const [isAddingCity, setIsAddingCity] = useState<boolean>(false)
     const [newCityName, setNewCityName] = useState<string>('')
-    const [addCityError, setAddCityError] = useState<string | null>(null)
 
-    const error = currentLocationError || savedLocationsError
-
-    const handleAddCity = async () => {
+    const handleAddCity = useCallback(async () => {
         if (!newCityName.trim()) return
 
-        try {
-            const response = await getGeoCoordinatesByCityName(newCityName)
-            if (!response) {
-                setAddCityError('City not found')
-                return
-            }
-
-            const coordinates = { latitude: parseFloat(response.lat), longitude: parseFloat(response.lon) }
-
-            const capitalizedCityName = newCityName
-                .toLowerCase()
-                .split(' ')
-                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                .join(' ')
-
-            const newCityData: CityData = {
-                cityName: capitalizedCityName,
-                location: coordinates,
-                weather: null,
-                isYourLocation: false,
-            }
-
-            await addLocation(newCityData)
-            reloadStoredLocations()
-            setIsAddingCity(false)
-            setNewCityName('')
-            setAddCityError(null)
-        } catch (error) {
-            setAddCityError('Failed to add city')
+        const { data, error } = await getGeoCoordinatesByCityName(newCityName)
+        if (error || !data) {
+            showErrorToast(error || 'City not found')
+            return
         }
-    }
+
+        const coordinates = {
+            latitude: parseFloat(data.lat),
+            longitude: parseFloat(data.lon)
+        }
+
+        const capitalizedCityName = newCityName
+            .toLowerCase()
+            .split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ')
+
+        const newCityData: CityData = {
+            cityName: capitalizedCityName,
+            location: coordinates,
+            weather: null,
+            isYourLocation: false,
+        }
+
+        await addLocation(newCityData)
+        reloadStoredLocations()
+        setIsAddingCity(false)
+        setNewCityName('')
+    }, [newCityName, reloadStoredLocations])
+
+    useEffect(() => {
+        const error = currentLocationError || savedLocationsError
+        console.log('errorrrr', error)
+        if (error) {
+            showErrorToast(error)
+        }
+    }, [currentLocationError, savedLocationsError])
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
-            {error && <Text>{error}</Text>}
             {currentLocation &&
                 <WeatherCard
                     cityData={currentLocation}

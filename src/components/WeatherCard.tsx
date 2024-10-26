@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { useNavigation, NavigationProp } from '@react-navigation/native'
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import { WeatherCardProps } from '../types/weatherInterfaces'
@@ -15,14 +15,14 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ cityData, reloadStoredLocatio
         setIsLongPressed(true)
     }
 
-    const handleRemoveCity = async () => {
+    const handleRemoveCity = useCallback(async () => {
         await removeLocation(cityData.cityName)
         reloadStoredLocations()
-    }
+    }, [cityData.cityName, reloadStoredLocations])
 
-    const handlePress = () => {
+    const handlePress = useCallback(() => {
         navigation.navigate('CityDetail', { cityData })
-    }
+    }, [cityData, navigation])
 
     return (
         <TouchableOpacity
@@ -32,7 +32,7 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ cityData, reloadStoredLocatio
                 isLongPressed && styles.cardLongPressed,
                 cityData.isYourLocation && styles.yourLocationCard,
             ]}
-            onPressIn={() => {setIsPressed(true); setIsLongPressed(false)}}
+            onPressIn={() => {setIsPressed(true), setIsLongPressed(false)}}
             onPressOut={() => setIsPressed(false)}
             onLongPress={handleLongPress}
             delayLongPress={400}
@@ -103,6 +103,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: '-33%',
     },
-});
+})
 
-export default WeatherCard;
+export default WeatherCard
