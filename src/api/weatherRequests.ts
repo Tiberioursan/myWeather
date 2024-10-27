@@ -40,8 +40,8 @@ export const getSunEventsByLocation = async (latitude: number, longitude: number
         const sunriseTime = getTimeString(response.data.properties.sunrise.time)
         const sunsetTime = getTimeString(response.data.properties.sunset.time)
 
-        return { sunriseTime, sunsetTime, error: null }
+        return { sunEvents: {sunriseTime, sunsetTime}, error: null }
     } catch (error) {
-        return { sunriseTime: '', sunsetTime: '', error: 'Failed to fetch sun events' }
+        return { sunEvents: null, error: 'Failed to fetch sun events' }
     }
 }

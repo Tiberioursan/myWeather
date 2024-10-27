@@ -6,26 +6,49 @@ import { getSunEventsByLocation } from '../api/weatherRequests'
 import { CityDetailRouteParams } from '../types/navigationTypes'
 import { showErrorToast } from '../errors/toastService'
 import useTemperature from '../hooks/useTemperature'
+import { getTimeZoneByCoordinates } from '../api/locationRequests'
 
 const DetailScreen = ({ route }: { route: CityDetailRouteParams }) => {
     const { cityData } = route.params
     const [sunriseTime, setSunriseTime] = useState<string>('')
     const [sunsetTime, setSunsetTime] = useState<string>('')
 
+    const adjustSunEventTimeForTimeZone = (sunriseTime: string, sunsetTime: string, offset: number) => {
+        const adjustTime = (time: string, offset: number) => {
+            const modifier = time.slice(-2) === 'PM' ? 12 : 0
+            const hours = parseInt(time.slice(0, 2)) + modifier + offset
+            const minutes = parseInt(time.split(':')[1].slice(0, 2))
+            const timeString = `${hours < 10 ? '0' : ''}${hours}:${minutes}`
+            return timeString
+        }
+        const adjustedSunriseTime = adjustTime(sunriseTime, offset)
+        const adjustedSunsetTime = adjustTime(sunsetTime, offset)
+        return { adjustedSunriseTime, adjustedSunsetTime }
+    }
+
     useEffect(() => {
         const fetchSunEvents = async (): Promise<void> => {
             const location = cityData.location
-            const sunEvents = await getSunEventsByLocation(
+            const { sunEvents, error: sunEventsError } = await getSunEventsByLocation(
                 location.latitude,
                 location.longitude
             )
 
-            if (sunEvents.error) {
-                showErrorToast(sunEvents.error)
+            if (sunEventsError || !sunEvents) {
+                showErrorToast(sunEventsError)
                 return
             }
-            setSunriseTime(sunEvents.sunriseTime)
-            setSunsetTime(sunEvents.sunsetTime)
+
+            const { offset, error: timeZoneError } = await getTimeZoneByCoordinates(location.latitude, location.longitude)
+
+            if (timeZoneError || offset === null) {
+                showErrorToast(timeZoneError || 'Failed to fetch timezone data')
+                return
+            }
+            
+            const { adjustedSunriseTime, adjustedSunsetTime } = adjustSunEventTimeForTimeZone(sunEvents.sunriseTime, sunEvents.sunsetTime, offset)
+            setSunriseTime(adjustedSunriseTime)
+            setSunsetTime(adjustedSunsetTime)
         }
 
         fetchSunEvents()
