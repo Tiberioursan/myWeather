@@ -19,22 +19,33 @@ const SettingsPage: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Settings</Text>
+      <Text
+        style={styles.title}
+        accessible={true}
+        accessibilityRole="header"
+      >Settings</Text>
       <View style={styles.settingItem}>
         <Text style={styles.settingText}>Temperature Unit:</Text>
         <Picker
           selectedValue={temperatureUnit}
           style={styles.picker}
           onValueChange={(itemValue) => setSelectedUnit(itemValue)}
+          accessible={true}
+          accessibilityLabel="Select temperature unit"
+          accessibilityHint="Choose between Celsius and Fahrenheit"
         >
           <Picker.Item label="Celsius" value="Celsius" />
           <Picker.Item label="Fahrenheit" value="Fahrenheit" />
         </Picker>
       </View>
-      <Button title="Save" onPress={() => {handleSaveSettings()}} />
+      <Button
+        title="Save"
+        onPress={() => {handleSaveSettings()}}
+        accessibilityLabel="Save settings"
+      />
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {

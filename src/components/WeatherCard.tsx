@@ -42,22 +42,47 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ cityData, reloadStoredLocatio
             onLongPress={handleLongPress}
             delayLongPress={400}
             onPress={handlePress}
+            accessible={true}
+            accessibilityLabel={`${cityData.cityName} weather card`}
+            accessibilityHint="Press to view details, long-press to remove"
+            accessibilityRole="button"
         >
-            {cityData.isYourLocation && <Text style={styles.yourLocationText}>Your location</Text>}
+            {cityData.isYourLocation &&
+                <Text
+                    style={styles.yourLocationText}
+                    accessibilityLabel="This is your current location"
+                >Your location</Text>
+            }
             <View style={[
                 styles.textContainer, 
                 isLongPressed && styles.cardLongPressed,
                 ]}
             >
-                <Text style={[styles.text, isPressed && styles.textPressed, styles.cityName]}>{cityData.cityName}</Text>
-                <WeatherIcon iconCode={cityData.weather?.weatherSymbolCode || ''} size='small' />
+                <Text
+                    style={[styles.text, isPressed && styles.textPressed, styles.cityName]}
+                    accessibilityLabel='City name'
+                >{cityData.cityName}</Text>
+                <WeatherIcon
+                    iconCode={cityData.weather?.weatherSymbolCode || ''}
+                    size='small'
+                    accessible={true}
+                    accessibilityLabel={`Weather icon for ${cityData.cityName}`}
+                />
                 <Text
                     style={[styles.text, isPressed && styles.textPressed, styles.temperature]}
+                    accessibilityLabel='Temperature'
                 >
                     {useTemperature(cityData.weather?.temperature ?? 0)}
                 </Text>
                 {isLongPressed && (
-                    <TouchableOpacity style={styles.removeButton} onPress={handleRemoveCity}>
+                    <TouchableOpacity
+                        style={styles.removeButton}
+                        onPress={handleRemoveCity}
+                        accessible={true}
+                        accessibilityLabel={`Remove ${cityData.cityName}`}
+                        accessibilityHint="Press to remove this location"
+                        accessibilityRole="button"
+                    >
                         <Image source={require('../assets/delete-icon.png')} />
                     </TouchableOpacity>
                 )}

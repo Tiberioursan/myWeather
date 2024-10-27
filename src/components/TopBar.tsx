@@ -12,14 +12,26 @@ const TopBar: React.FC = () => {
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={styles.backButton}
+          accessible={true}
+          accessibilityLabel="Back button"
+          accessibilityHint="Returns to the previous screen"
+          accessibilityRole="button"
         >
           <Image source={require('../assets/back-icon.png')} />
         </TouchableOpacity>
       )}
-      <Text style={styles.title}>myWeather</Text>
+      <Text
+        style={styles.title}
+        accessible={true}
+        accessibilityRole="header"
+      >myWeather</Text>
       <TouchableOpacity
         onPress={() => navigation.navigate('Settings')}
         style={styles.settingsButton}
+        accessible={true}
+        accessibilityLabel="Settings"
+        accessibilityHint="Opens the settings page"
+        accessibilityRole="button"
       >
         <Image source={require('../assets/settings-icon.png')} />
       </TouchableOpacity>

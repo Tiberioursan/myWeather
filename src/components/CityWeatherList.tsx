@@ -74,33 +74,52 @@ const CityWeatherList: React.FC<CityWeatherListProps> = ({ location }) => {
     return (
         <ScrollView contentContainerStyle={styles.container}>
             {currentLocation &&
-                <WeatherCard
-                    cityData={currentLocation}
-                    reloadStoredLocations={reloadStoredLocations}
-                />
+            <WeatherCard
+                cityData={currentLocation}
+                reloadStoredLocations={reloadStoredLocations}
+                accessible={true}
+                accessibilityLabel={`Current location: ${currentLocation.cityName}`}
+                accessibilityHint="Displays weather information for your current location"
+            />
             }
             {storedLocations.map((location, index) => (
-                <WeatherCard
-                    key={`${location.cityName}-${index}`}
-                    cityData={location}
-                    reloadStoredLocations={reloadStoredLocations}
-                />
+            <WeatherCard
+                key={`${location.cityName}-${index}`}
+                cityData={location}
+                reloadStoredLocations={reloadStoredLocations}
+                accessible={true}
+                accessibilityLabel={`Stored location: ${location.cityName}`}
+                accessibilityHint="Displays weather information for this stored location"
+            />
             ))}
 
             {isAddingCity ? (
-                <View style={styles.addCityContainer}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Enter city name"
-                        value={newCityName}
-                        onChangeText={setNewCityName}
-                    />
-                    <Button title="Add City" onPress={handleAddCity} />
-                </View>
+            <View style={styles.addCityContainer}>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Enter city name"
+                    value={newCityName}
+                    onChangeText={setNewCityName}
+                    accessibilityLabel="City name input"
+                    accessibilityHint="Enter the name of the city to add it to the list"
+                />
+                <Button
+                    title="Add City"
+                    onPress={handleAddCity}
+                    accessibilityLabel="Add City Button"
+                />
+            </View>
             ) : (
-                <TouchableOpacity style={styles.addButton} onPress={() => setIsAddingCity(true)}>
-                    <Image source={require('../assets/add-item-icon.png')} />
-                </TouchableOpacity>
+            <TouchableOpacity
+                style={styles.addButton}
+                onPress={() => setIsAddingCity(true)}
+                accessible={true}
+                accessibilityLabel="Add a new city"
+                accessibilityHint="Opens input to add a new city to the list"
+                accessibilityRole="button"
+            >
+                <Image source={require('../assets/add-item-icon.png')} />
+            </TouchableOpacity>
             )}
         </ScrollView>
     )

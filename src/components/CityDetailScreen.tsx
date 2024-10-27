@@ -33,30 +33,62 @@ const DetailScreen = ({ route }: { route: CityDetailRouteParams }) => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.mainInfoBox}>
+            <View
+                style={styles.mainInfoBox}
+                accessible={true}
+                accessibilityLabel={`Weather details for ${cityData.cityName}`}
+            >
                 <CityDateAndTime latitude={cityData.location.latitude} longitude={cityData.location.longitude} />
-                <Text style={styles.cityName}>{cityData.cityName}</Text>
-                <WeatherIcon iconCode={cityData.weather?.weatherSymbolCode || ''} size={'big'} />
-                <Text style={styles.temperature}>{useTemperature(cityData.weather?.temperature ?? 0)}</Text>
+                <Text
+                    style={styles.cityName}
+                    accessible={true}
+                    accessibilityRole="header"
+                >{cityData.cityName}</Text>
+                <WeatherIcon
+                    iconCode={cityData.weather?.weatherSymbolCode || ''}
+                    size={'big'}
+                    accessible={true}
+                    accessibilityLabel={`Weather icon for ${cityData.cityName}`}
+                />
+                <Text
+                    style={styles.temperature}
+                    accessibilityLabel={`Temperature for ${cityData.cityName}`}
+                >{useTemperature(cityData.weather?.temperature ?? 0)}</Text>
             </View>
 
             <View style={styles.infoContainer}>
-                <View style={styles.infoBox}>
+                <View
+                    style={styles.infoBox}
+                    accessible={true}
+                    accessibilityLabel={`Min temperature: ${useTemperature(cityData.weather?.temperatureMin ?? 0)}`}
+                >
                     <Text style={styles.infoLabel}>Min Temperature:</Text>
                     <Text style={styles.infoValue}>{useTemperature(cityData.weather?.temperatureMin ?? 0)}</Text>
                 </View>
-                <View style={styles.infoBox}>
+                <View
+                    style={styles.infoBox}
+                    accessible={true}
+                    accessibilityLabel={`Max temperature: ${useTemperature(cityData.weather?.temperatureMax ?? 0)}`}
+                >
                     <Text style={styles.infoLabel}>Max Temperature:</Text>
                     <Text style={styles.infoValue}>{useTemperature(cityData.weather?.temperatureMax ?? 0)}</Text>
                 </View>
                 {sunriseTime && (
-                    <View style={styles.infoBox}>
+                    <View
+                        style={styles.infoBox}
+                        accessible={true}
+                        accessibilityLabel={`Sunrise time: ${sunriseTime}`}
+                    >
                         <Text style={styles.infoLabel}>Sunrise:</Text>
                         <Text style={styles.infoValue}>{sunriseTime}</Text>
                     </View>
                 )}
                 {sunsetTime && (
-                    <View style={styles.infoBox}>
+                    <View
+                        style={styles.infoBox}
+                        accessible={true}
+                        accessibilityLabel={`Sunset time: ${sunsetTime}`}
+                    >
                         <Text style={styles.infoLabel}>Sunset:</Text>
                         <Text style={styles.infoValue}>{sunsetTime}</Text>
                     </View>

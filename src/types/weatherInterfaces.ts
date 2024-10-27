@@ -24,11 +24,16 @@ export interface CityData {
 export interface WeatherCardProps {
     cityData: CityData,
     reloadStoredLocations: () => Promise<void>
+    accessible: boolean | false,
+    accessibilityLabel: string | '',
+    accessibilityHint: string | ''
 }
 
 export interface WeatherIconProps {
     iconCode: string,
-    size: 'small' | 'big'
+    size: 'small' | 'big',
+    accessible: boolean | false,
+    accessibilityLabel: string | ''
 }
 
 export interface TimeDisplayProps {
