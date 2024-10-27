@@ -2,14 +2,15 @@ import React, { useState, useEffect, useCallback } from 'react'
 import {
     StyleSheet,
     ScrollView,
-    Text,
     View,
     TextInput,
     Button,
     TouchableOpacity,
-    Image
+    Image,
+    Keyboard
 } from 'react-native'
-import { CityWeatherListProps, CityData } from '../types/weatherInterfaces'
+import { CityData } from '../types/genericInterfaces'
+import { CityWeatherListProps } from '../types/propsInterfaces'
 import WeatherCard from './WeatherCard'
 import useCurrentLocationWeather from '../hooks/useCurrentLocationWeather'
 import useStoredLocationsWeather from '../hooks/useStoredLocationsWeather'
@@ -17,17 +18,9 @@ import { getGeoCoordinatesByCityName } from '../api/locationRequests'
 import { addLocation } from '../storage/storageActions'
 import { showErrorToast } from '../errors/toastService'
 
-const CityWeatherList: React.FC<CityWeatherListProps> = ({ location }) => {
+const LocationsList: React.FC<CityWeatherListProps> = ({ location }) => {
     const { currentLocation, error: currentLocationError } = useCurrentLocationWeather(location)
-    const {
-        storedLocations,
-        error: savedLocationsError,
-        reloadStoredLocations
-    } = useStoredLocationsWeather() as {
-        storedLocations: CityData[],
-        error: string | null,
-        reloadStoredLocations: () => Promise<void>
-    }
+    const { storedLocations, error: savedLocationsError, reloadStoredLocations } = useStoredLocationsWeather()
     const [isAddingCity, setIsAddingCity] = useState<boolean>(false)
     const [newCityName, setNewCityName] = useState<string>('')
 
@@ -62,6 +55,7 @@ const CityWeatherList: React.FC<CityWeatherListProps> = ({ location }) => {
         reloadStoredLocations()
         setIsAddingCity(false)
         setNewCityName('')
+        Keyboard.dismiss()
     }, [newCityName, reloadStoredLocations])
 
     useEffect(() => {
@@ -153,4 +147,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default CityWeatherList
+export default LocationsList

@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { CityData } from '../types/weatherInterfaces'
+import { CityData } from '../types/genericInterfaces'
 import { locationsList } from './locationsStorage'
 import { showErrorToast } from '../errors/toastService'
 
@@ -32,7 +32,7 @@ export const addLocation = async (newCity: CityData) => {
             showErrorToast('Failed to add city')
             return
         }
-        const exists = cities.some((city: CityData) => city.cityName === newCity.cityName);
+        const exists = cities.some((city: CityData) => city.cityName === newCity.cityName)
         if (exists) {
             showErrorToast('City already exists')
             return
@@ -65,10 +65,10 @@ export const storeTemperatureUnit = async (unit: string) => {
 
 export const getTemperatureUnit = async () => {
     try {
-        const unit = await AsyncStorage.getItem(TEMPERATURE_UNIT_KEY);
+        const unit = await AsyncStorage.getItem(TEMPERATURE_UNIT_KEY)
         return unit ? unit : 'Celsius'
     } catch (error) {
         showErrorToast('Error fetching temperature unit')
         return 'Celsius'
     }
-};
+}

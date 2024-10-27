@@ -4,7 +4,11 @@ import { ToastConfigParams } from 'react-native-toast-message'
 
 const toastConfig = {
   error: (params: ToastConfigParams<any>) => (
-    <View style={styles.errorContainer}>
+    <View
+      style={styles.errorContainer}
+      accessibilityRole='alert'
+      accessibilityLabel={params.text1}
+    >
       <Text style={styles.errorTitle}>{params.text1}</Text>
       <Text style={styles.errorText}>{params.text2}</Text>
     </View>

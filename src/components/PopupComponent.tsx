@@ -1,9 +1,10 @@
 import React from 'react'
 import { View, Text, Button, Modal, StyleSheet } from 'react-native'
 import { usePopup } from '../context/PopupContext'
+import { PopupContextType } from '../types/genericInterfaces'
 
 const PopupComponent = () => {
-    const { isVisible, popupContent, hidePopup } = usePopup()
+    const { isVisible, popupContent, hidePopup }: PopupContextType = usePopup()
 
     if (!isVisible) return null
 
@@ -13,10 +14,15 @@ const PopupComponent = () => {
             visible={isVisible}
             animationType="fade"
             onRequestClose={hidePopup}
+            accessibilityRole="alert"
         >
             <View style={styles.overlay}>
                 <View style={styles.popupContainer}>
-                    <Text style={styles.message}>{popupContent.message}</Text>
+                    <Text
+                        style={styles.message}
+                        accessibilityLabel="Popup message"
+                        numberOfLines={3}
+                    >{popupContent.message}</Text>
                     <View style={styles.buttonContainer}>
                         {popupContent.confirmText &&
                             <Button
@@ -26,6 +32,7 @@ const PopupComponent = () => {
                                     popupContent.onConfirm && popupContent.onConfirm()
                                     hidePopup()
                                 }}
+                                accessibilityLabel="Confirm action"
                             />
                         }
                         <Button
@@ -34,6 +41,7 @@ const PopupComponent = () => {
                                 popupContent.onCancel()
                                 hidePopup()
                             }}
+                            accessibilityLabel="Cancel action"
                         />
                     </View>
                 </View>

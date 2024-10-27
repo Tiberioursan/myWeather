@@ -1,19 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode, Context } from 'react'
+import { PopupContent, PopupContextType } from '../types/genericInterfaces'
 
-interface PopupContent {
-    message: string,
-    confirmText: string,
-    cancelText: string,
-    onConfirm: (() => void) | null,
-    onCancel: () => void
-}
-
-interface PopupContextType {
-    isVisible: boolean,
-    popupContent: PopupContent,
-    showPopup: (content: PopupContent) => void,
-    hidePopup: () => void
-}
 
 const defaultPopupContent: PopupContent = {
     message: '',

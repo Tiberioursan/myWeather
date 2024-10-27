@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { getTemperatureUnit } from '../storage/storageActions'
-import { TemperatureContextType } from '../types/weatherInterfaces'
+import { TemperatureContextType } from '../types/genericInterfaces'
 
 const TemperatureContext = createContext<TemperatureContextType | undefined>(undefined);
 

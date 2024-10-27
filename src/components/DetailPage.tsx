@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import WeatherIcon from './WeatherIcon'
-import CityDateAndTime from './CityDateAndTime'
+import DateAndTime from './DateAndTime'
 import { getSunEventsByLocation } from '../api/weatherRequests'
-import { CityDetailRouteParams } from '../types/navigationTypes'
+import { CityDetailRouteParams } from '../types/navigationInterfaces'
 import { showErrorToast } from '../errors/toastService'
 import useTemperature from '../hooks/useTemperature'
 import { getTimeZoneByCoordinates } from '../api/locationRequests'
 
-const DetailScreen = ({ route }: { route: CityDetailRouteParams }) => {
+const DetailPage = ({ route }: { route: CityDetailRouteParams }) => {
     const { cityData } = route.params
     const [sunriseTime, setSunriseTime] = useState<string>('')
     const [sunsetTime, setSunsetTime] = useState<string>('')
 
     const adjustSunEventTimeForTimeZone = (sunriseTime: string, sunsetTime: string, offset: number) => {
         const adjustTime = (time: string, offset: number) => {
-            const modifier = time.slice(-2) === 'PM' ? 12 : 0
+            const modifier = time.slice(-2) === 'PM' && time.slice(0, 2) !== '12' ? 12 : 0
             const hours = parseInt(time.slice(0, 2)) + modifier + offset
             const minutes = parseInt(time.split(':')[1].slice(0, 2))
-            const timeString = `${hours < 10 ? '0' : ''}${hours}:${minutes}`
+            const adjustedHours = (hours + 24) % 24
+            const timeString = `${adjustedHours < 10 ? '0' : ''}${adjustedHours}:${minutes < 10 ? '0' : ''}${minutes}`
             return timeString
         }
         const adjustedSunriseTime = adjustTime(sunriseTime, offset)
@@ -28,19 +29,21 @@ const DetailScreen = ({ route }: { route: CityDetailRouteParams }) => {
 
     useEffect(() => {
         const fetchSunEvents = async (): Promise<void> => {
-            const location = cityData.location
+            const { latitude, longitude } = cityData.location
+            
             const { sunEvents, error: sunEventsError } = await getSunEventsByLocation(
-                location.latitude,
-                location.longitude
+                latitude,
+                longitude
             )
-
             if (sunEventsError || !sunEvents) {
-                showErrorToast(sunEventsError)
+                showErrorToast(sunEventsError || 'Failed to fetch sun events')
                 return
             }
 
-            const { offset, error: timeZoneError } = await getTimeZoneByCoordinates(location.latitude, location.longitude)
-
+            const { offset, error: timeZoneError } = await getTimeZoneByCoordinates(
+                latitude,
+                longitude
+            )
             if (timeZoneError || offset === null) {
                 showErrorToast(timeZoneError || 'Failed to fetch timezone data')
                 return
@@ -61,7 +64,7 @@ const DetailScreen = ({ route }: { route: CityDetailRouteParams }) => {
                 accessible={true}
                 accessibilityLabel={`Weather details for ${cityData.cityName}`}
             >
-                <CityDateAndTime latitude={cityData.location.latitude} longitude={cityData.location.longitude} />
+                <DateAndTime latitude={cityData.location.latitude} longitude={cityData.location.longitude} />
                 <Text
                     style={styles.cityName}
                     accessible={true}
@@ -173,4 +176,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default DetailScreen
+export default DetailPage

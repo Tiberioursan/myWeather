@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Platform, PermissionsAndroid, Linking } from 'react-native'
 import Geolocation from 'react-native-geolocation-service'
-import { Location } from '../types/weatherInterfaces'
+import { Location } from '../types/genericInterfaces'
+import { UseLocationResult } from '../types/responseInterfaces'
 
-const useLocation = () => {
+const useLocation = (): UseLocationResult => {
     const [location, setLocation] = useState<Location | null>(null)
     const [error, setError] = useState<string | null>(null)
 

@@ -3,12 +3,12 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { showErrorToast } from './src/errors/toastService'
 import TopBar from './src/components/TopBar'
-import CityWeatherList from './src/components/CityWeatherList'
-import CityDetailScreen from './src/components/CityDetailScreen'
+import LocationsList from './src/components/LocationsList'
+import DetailPage from './src/components/DetailPage'
 import BackgroundWrapper from './src/components/BackgroundWrapper'
 import SettingsPage from './src/components/SettingsPage'
 import useLocation from './src/hooks/useLocation'
-import { RootStackParamList, CityDetailScreenProps } from './src/types/navigationTypes'
+import { RootStackParamList, CityDetailScreenProps } from './src/types/navigationInterfaces'
 import AppWrapper from './src/context/AppWrapper'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -25,7 +25,7 @@ const HomeScreen: React.FC = () => {
   return (
     <BackgroundWrapper>
       <TopBar />
-      {location && <CityWeatherList location={location} />}
+      {location && <LocationsList location={location} />}
     </BackgroundWrapper>
   )
 }
@@ -34,7 +34,7 @@ const DetailScreen: React.FC<CityDetailScreenProps> = ({ route }) => {
   return (
     <BackgroundWrapper>
       <TopBar />
-      <CityDetailScreen route={route} />
+      <DetailPage route={route} />
     </BackgroundWrapper>
   )
 }

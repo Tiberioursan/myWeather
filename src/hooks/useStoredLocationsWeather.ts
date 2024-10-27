@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
-import { CityData } from '../types/weatherInterfaces'
+import { CityData } from '../types/genericInterfaces'
 import { getAllLocations } from '../storage/storageActions'
 import { getWeatherByLocation } from '../api/weatherRequests'
+import { UseStoredLocationsWeatherResult } from '../types/responseInterfaces'
 
-const useStoredLocationsWeather = () => {
+const useStoredLocationsWeather = (): UseStoredLocationsWeatherResult => {
     const [storedLocations, setStoredLocations] = useState<CityData[]>([])
     const [error, setError] = useState<string | null>(null)
 
@@ -14,7 +15,6 @@ const useStoredLocationsWeather = () => {
 
         if (locationsError) {
             setError(locationsError)
-            console.error('Error fetching saved locationssssssssssssssss:', locationsError)
             return
         }
 
@@ -23,7 +23,6 @@ const useStoredLocationsWeather = () => {
                 const { weather, error: weatherError } = await getWeatherByLocation(city.location.latitude, city.location.longitude)
                 if (weatherError) {
                     setError(weatherError)
-                    console.error('Error fetching weather:', weatherError)
                     return city
                 }
                 return { ...city, weather }
@@ -33,7 +32,7 @@ const useStoredLocationsWeather = () => {
         setStoredLocations(locationsWithWeather)
     }
 
-    const reloadStoredLocations = () => {
+    const reloadStoredLocations = async () => {
         fetchStoredLocationsWeather()
     }
 

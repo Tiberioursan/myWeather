@@ -1,4 +1,4 @@
-import { CityData } from '../types/weatherInterfaces'
+import { CityData } from '../types/genericInterfaces'
 
 export const locationsList: CityData[] = [
     {

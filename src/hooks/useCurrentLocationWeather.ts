@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
-import { CityData, Location } from '../types/weatherInterfaces'
+import { CityData, Location } from '../types/genericInterfaces'
+import { UseCurrentLocationWeatherResult } from '../types/responseInterfaces'
 import { getWeatherByLocation } from '../api/weatherRequests'
 import { getLocationName } from '../api/locationRequests'
 
-const useCurrentLocationWeather = (location: Location) => {
+const useCurrentLocationWeather = (location: Location): UseCurrentLocationWeatherResult => {
     const [currentLocation, setCurrentLocation] = useState<CityData | null>(null)
     const [error, setError] = useState<string | null>(null)
 

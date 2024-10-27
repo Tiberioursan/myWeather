@@ -1,5 +1,5 @@
 import apiClient from './weatherApiClient'
-import { WeatherByLocationResponse } from '../types/weatherInterfaces'
+import { WeatherByLocationResponse, SunEventsResponse } from '../types/responseInterfaces'
 
 export const getWeatherByLocation = async (latitude: number, longitude: number): Promise<WeatherByLocationResponse> => {
     try {
@@ -26,7 +26,7 @@ export const getWeatherByLocation = async (latitude: number, longitude: number):
     }
 }
 
-export const getSunEventsByLocation = async (latitude: number, longitude: number) => {
+export const getSunEventsByLocation = async (latitude: number, longitude: number): Promise<SunEventsResponse> => {
     try {
         const response = await apiClient.get(
             `/sunrise/3.0/sun?lat=${latitude}&lon=${longitude}`

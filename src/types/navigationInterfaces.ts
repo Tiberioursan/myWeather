@@ -1,4 +1,4 @@
-import { CityData } from './weatherInterfaces'
+import { CityData } from './genericInterfaces'
 import { RouteProp } from '@react-navigation/native'
 
 export type RootStackParamList = {

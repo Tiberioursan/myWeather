@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, Button } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
-import { storeTemperatureUnit, getTemperatureUnit } from '../storage/storageActions'
+import { storeTemperatureUnit } from '../storage/storageActions'
 import { useTemperatureContext } from '../context/SettingsContext'
 import { usePopup } from '../context/PopupContext'
 

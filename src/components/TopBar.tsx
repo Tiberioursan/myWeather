@@ -1,10 +1,11 @@
 import React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native'
+import { RootStackParamList } from '../types/navigationInterfaces'
 
 const TopBar: React.FC = () => {
-  const navigation = useNavigation<any>()
-  const route = useRoute()
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>()
+  const route = useRoute<RouteProp<RootStackParamList, keyof RootStackParamList>>()
 
   return (
     <View style={styles.container}>
@@ -17,13 +18,14 @@ const TopBar: React.FC = () => {
           accessibilityHint="Returns to the previous screen"
           accessibilityRole="button"
         >
-          <Image source={require('../assets/back-icon.png')} />
+          <Image source={require('../assets/back-icon.png')} accessibilityLabel="Back icon" />
         </TouchableOpacity>
       )}
       <Text
         style={styles.title}
         accessible={true}
         accessibilityRole="header"
+        accessibilityLabel="My Weather App"
       >myWeather</Text>
       <TouchableOpacity
         onPress={() => navigation.navigate('Settings')}

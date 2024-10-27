@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet } from 'react-native'
 import Image from 'react-native-remote-svg'
-import { WeatherIconProps } from '../types/weatherInterfaces'
+import { WeatherIconProps } from '../types/propsInterfaces'
 
 const WeatherIcon: React.FC<WeatherIconProps> = ({ iconCode, size }) => {
     const [weatherIcon, setWeatherIcon] = useState<string | null>(null)
@@ -17,6 +17,8 @@ const WeatherIcon: React.FC<WeatherIconProps> = ({ iconCode, size }) => {
         <Image
             source={{ uri: weatherIcon || '' }}
             style={styles[`${size}WeatherIcon`]}
+            accessible={true}
+            accessibilityLabel={`Weather icon for ${iconCode}`}
         />
     )
 }

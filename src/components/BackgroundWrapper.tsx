@@ -1,12 +1,13 @@
 import React from 'react'
 import { ImageBackground, SafeAreaView, StyleSheet, View } from 'react-native'
-import { BackgroundWrapperProps } from '../types/weatherInterfaces'
+import { BackgroundWrapperProps } from '../types/propsInterfaces'
 
 const BackgroundWrapper: React.FC<BackgroundWrapperProps> = ({ children }) => {
     return (
       <ImageBackground
         source={require('../assets/background.jpg')}
         style={styles.background}
+        accessibilityRole="image"
       >
         <View style={styles.overlay} />
         <SafeAreaView style={styles.container}>

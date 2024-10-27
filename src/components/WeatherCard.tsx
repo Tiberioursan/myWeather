@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { useNavigation, NavigationProp } from '@react-navigation/native'
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
-import { WeatherCardProps } from '../types/weatherInterfaces'
-import { RootStackParamList } from '../types/navigationTypes'
+import { WeatherCardProps } from '../types/propsInterfaces'
+import { RootStackParamList } from '../types/navigationInterfaces'
 import WeatherIcon from './WeatherIcon'
 import { removeLocation } from '../storage/storageActions'
 import useTemperature from '../hooks/useTemperature'
@@ -31,20 +31,21 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ cityData, reloadStoredLocatio
         })
     }, [cityData.cityName, reloadStoredLocations])
 
-    const handlePress = useCallback(() => {
+    const handlePress = () => {
         if (isLongPressed) {
-            console.log('long press')
+            console.log('long presssss')
             setIsLongPressed(false)
             return
         }
         navigation.navigate('CityDetail', { cityData })
-    }, [cityData, navigation])
+    }
     
     return (
         <TouchableOpacity
             style={[
                 styles.card,
                 isPressed && styles.cardPressed,
+                isLongPressed && styles.cardLongPressed,
                 cityData.isYourLocation && styles.yourLocationCard,
             ]}
             onPressIn={() => setIsPressed(true)}
@@ -65,7 +66,7 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ cityData, reloadStoredLocatio
             }
             <View style={[
                 styles.textContainer, 
-                isLongPressed && styles.cardLongPressed,
+                isLongPressed && styles.cardViewLongPressed,
                 ]}
             >
                 <Text
@@ -113,9 +114,12 @@ const styles = StyleSheet.create({
         paddingTop: 5,
     },
     cardPressed: {
-        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+        backgroundColor: 'rgba(255, 100, 100, 0.5)',
     },
     cardLongPressed: {
+        backgroundColor: 'rgba(230, 230, 255, 0.6)',
+    },
+    cardViewLongPressed: {
         width: '80%',
         marginLeft: '-20%',
     },
