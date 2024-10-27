@@ -6,19 +6,29 @@ import { RootStackParamList } from '../types/navigationTypes'
 import WeatherIcon from './WeatherIcon'
 import { removeLocation } from '../storage/storageActions'
 import useTemperature from '../hooks/useTemperature'
+import { usePopup } from '../context/PopupContext'
 
 const WeatherCard: React.FC<WeatherCardProps> = ({ cityData, reloadStoredLocations }) => {
     const [isPressed, setIsPressed] = useState<boolean>(false)
     const [isLongPressed, setIsLongPressed] = useState<boolean>(false)
     const navigation = useNavigation<NavigationProp<RootStackParamList>>()
+    const { showPopup } = usePopup()
 
     const handleLongPress = () => {
         setIsLongPressed(true)
     }
 
     const handleRemoveCity = useCallback(async () => {
-        await removeLocation(cityData.cityName)
-        reloadStoredLocations()
+        showPopup({
+            message: `Are you sure you want to remove ${cityData.cityName}?`,
+            confirmText: 'Delete',
+            cancelText: 'Cancel',
+            onConfirm: async () => {
+                await removeLocation(cityData.cityName)
+                reloadStoredLocations()
+            },
+            onCancel: () => {setIsLongPressed(false)}
+        })
     }, [cityData.cityName, reloadStoredLocations])
 
     const handlePress = useCallback(() => {

@@ -3,10 +3,12 @@ import { View, Text, StyleSheet, Button } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
 import { storeTemperatureUnit, getTemperatureUnit } from '../storage/storageActions'
 import { useTemperatureContext } from '../context/SettingsContext'
+import { usePopup } from '../context/PopupContext'
 
 const SettingsPage: React.FC = () => {
   const { temperatureUnit, setTemperatureUnit } = useTemperatureContext()
   const [selectedUnit, setSelectedUnit] = useState<string>(temperatureUnit)
+  const { showPopup } = usePopup()
 
   useEffect(() => {
     setSelectedUnit(temperatureUnit)
@@ -15,6 +17,13 @@ const SettingsPage: React.FC = () => {
   const handleSaveSettings = async () => {
     await storeTemperatureUnit(selectedUnit)
     setTemperatureUnit(selectedUnit)
+    showPopup({
+      message: 'Settings saved successfully!',
+      confirmText: '',
+      cancelText: 'OK',
+      onConfirm: null,
+      onCancel: () => {},
+    })
 }
 
   return (

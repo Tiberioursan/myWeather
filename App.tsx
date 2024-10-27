@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import Toast from 'react-native-toast-message'
-import toastConfig from './src/errors/toastConfig'
 import { showErrorToast } from './src/errors/toastService'
 import TopBar from './src/components/TopBar'
 import CityWeatherList from './src/components/CityWeatherList'
@@ -11,7 +9,7 @@ import BackgroundWrapper from './src/components/BackgroundWrapper'
 import SettingsPage from './src/components/SettingsPage'
 import useLocation from './src/hooks/useLocation'
 import { RootStackParamList, CityDetailScreenProps } from './src/types/navigationTypes'
-import { TemperatureProvider } from './src/context/SettingsContext'
+import AppWrapper from './src/context/AppWrapper'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
@@ -59,12 +57,11 @@ const AppNavigator: React.FC = () => (
 )
 
 const App: React.FC = () => (
-  <TemperatureProvider>
+  <AppWrapper>
     <NavigationContainer>
       <AppNavigator />
     </NavigationContainer>
-    <Toast config={toastConfig} />
-  </TemperatureProvider>
+  </AppWrapper>
 )
 
 export default App
