@@ -4,6 +4,7 @@ import { locationsList } from './locationsStorage'
 import { showErrorToast } from '../errors/toastService'
 
 const STORAGE_KEY = '@cities_key'
+const TEMPERATURE_UNIT_KEY = '@temperature_unit_key'
 
 export const storeAllLocations = async (cities: CityData[]) => {
     try {
@@ -53,3 +54,21 @@ export const removeLocation = async (cityName: string) => {
         showErrorToast('Failed to remove city')
     }
 }
+
+export const storeTemperatureUnit = async (unit: string) => {
+    try {
+        await AsyncStorage.setItem(TEMPERATURE_UNIT_KEY, unit)
+    } catch (error) {
+        showErrorToast('Failed to store temperature unit')
+    }
+}
+
+export const getTemperatureUnit = async () => {
+    try {
+        const unit = await AsyncStorage.getItem(TEMPERATURE_UNIT_KEY);
+        return unit ? unit : 'Celsius'
+    } catch (error) {
+        showErrorToast('Error fetching temperature unit')
+        return 'Celsius'
+    }
+};

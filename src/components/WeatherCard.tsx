@@ -1,10 +1,11 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { useNavigation, NavigationProp } from '@react-navigation/native'
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import { WeatherCardProps } from '../types/weatherInterfaces'
 import { RootStackParamList } from '../types/navigationTypes'
 import WeatherIcon from './WeatherIcon'
 import { removeLocation } from '../storage/storageActions'
+import useTemperature from '../hooks/useTemperature'
 
 const WeatherCard: React.FC<WeatherCardProps> = ({ cityData, reloadStoredLocations }) => {
     const [isPressed, setIsPressed] = useState<boolean>(false)
@@ -28,7 +29,7 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ cityData, reloadStoredLocatio
         }
         navigation.navigate('CityDetail', { cityData })
     }, [cityData, navigation])
-
+    
     return (
         <TouchableOpacity
             style={[
@@ -50,7 +51,11 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ cityData, reloadStoredLocatio
             >
                 <Text style={[styles.text, isPressed && styles.textPressed, styles.cityName]}>{cityData.cityName}</Text>
                 <WeatherIcon iconCode={cityData.weather?.weatherSymbolCode || ''} size='small' />
-                <Text style={[styles.text, isPressed && styles.textPressed, styles.temperature]}>{cityData.weather?.temperature}°C</Text>
+                <Text
+                    style={[styles.text, isPressed && styles.textPressed, styles.temperature]}
+                >
+                    {useTemperature(cityData.weather?.temperature ?? 0)}
+                </Text>
                 {isLongPressed && (
                     <TouchableOpacity style={styles.removeButton} onPress={handleRemoveCity}>
                         <Image source={require('../assets/delete-icon.png')} />

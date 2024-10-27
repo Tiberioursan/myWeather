@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
 
 const TopBar: React.FC = () => {
-  const navigation = useNavigation()
+  const navigation = useNavigation<any>()
   const route = useRoute()
 
   return (
@@ -17,6 +17,12 @@ const TopBar: React.FC = () => {
         </TouchableOpacity>
       )}
       <Text style={styles.title}>myWeather</Text>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Settings')}
+        style={styles.settingsButton}
+      >
+        <Image source={require('../assets/settings-icon.png')} />
+      </TouchableOpacity>
     </View>
   )
 }
@@ -37,7 +43,13 @@ const styles = StyleSheet.create({
   backButton: {
     padding: 10,
     position: 'absolute',
-    left: 0,
+    left: 5,
+    zIndex: 1,
+  },
+  settingsButton: {
+    padding: 10,
+    position: 'absolute',
+    right: 10,
     zIndex: 1,
   },
 })

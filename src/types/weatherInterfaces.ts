@@ -62,3 +62,8 @@ export interface TimeZoneResponse {
     offset: number | null;
     error: string | null;
 }
+
+export interface TemperatureContextType {
+    temperatureUnit: string;
+    setTemperatureUnit: (unit: string) => void;
+}

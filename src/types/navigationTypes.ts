@@ -4,6 +4,7 @@ import { RouteProp } from '@react-navigation/native'
 export type RootStackParamList = {
     Home: undefined
     CityDetail: { cityData: CityData }
+    Settings: undefined
 }
 
 export interface CityDetailRouteParams {

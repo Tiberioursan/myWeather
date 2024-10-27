@@ -66,7 +66,6 @@ const CityWeatherList: React.FC<CityWeatherListProps> = ({ location }) => {
 
     useEffect(() => {
         const error = currentLocationError || savedLocationsError
-        console.log('errorrrr', error)
         if (error) {
             showErrorToast(error)
         }

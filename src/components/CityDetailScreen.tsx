@@ -5,6 +5,7 @@ import CityDateAndTime from './CityDateAndTime'
 import { getSunEventsByLocation } from '../api/weatherRequests'
 import { CityDetailRouteParams } from '../types/navigationTypes'
 import { showErrorToast } from '../errors/toastService'
+import useTemperature from '../hooks/useTemperature'
 
 const DetailScreen = ({ route }: { route: CityDetailRouteParams }) => {
     const { cityData } = route.params
@@ -36,17 +37,17 @@ const DetailScreen = ({ route }: { route: CityDetailRouteParams }) => {
                 <CityDateAndTime latitude={cityData.location.latitude} longitude={cityData.location.longitude} />
                 <Text style={styles.cityName}>{cityData.cityName}</Text>
                 <WeatherIcon iconCode={cityData.weather?.weatherSymbolCode || ''} size={'big'} />
-                <Text style={styles.temperature}>{`${cityData.weather?.temperature}°C`}</Text>
+                <Text style={styles.temperature}>{useTemperature(cityData.weather?.temperature ?? 0)}</Text>
             </View>
 
             <View style={styles.infoContainer}>
                 <View style={styles.infoBox}>
                     <Text style={styles.infoLabel}>Min Temperature:</Text>
-                    <Text style={styles.infoValue}>{`${cityData.weather?.temperatureMin}°C`}</Text>
+                    <Text style={styles.infoValue}>{useTemperature(cityData.weather?.temperatureMin ?? 0)}</Text>
                 </View>
                 <View style={styles.infoBox}>
                     <Text style={styles.infoLabel}>Max Temperature:</Text>
-                    <Text style={styles.infoValue}>{`${cityData.weather?.temperatureMax}°C`}</Text>
+                    <Text style={styles.infoValue}>{useTemperature(cityData.weather?.temperatureMax ?? 0)}</Text>
                 </View>
                 {sunriseTime && (
                     <View style={styles.infoBox}>
