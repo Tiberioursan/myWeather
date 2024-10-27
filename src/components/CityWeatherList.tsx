@@ -6,7 +6,8 @@ import {
     View,
     TextInput,
     Button,
-    TouchableOpacity
+    TouchableOpacity,
+    Image
 } from 'react-native'
 import { CityWeatherListProps, CityData } from '../types/weatherInterfaces'
 import WeatherCard from './WeatherCard'
@@ -99,7 +100,7 @@ const CityWeatherList: React.FC<CityWeatherListProps> = ({ location }) => {
                 </View>
             ) : (
                 <TouchableOpacity style={styles.addButton} onPress={() => setIsAddingCity(true)}>
-                    <Text style={styles.addButtonText}>+ Add City</Text>
+                    <Image source={require('../assets/add-item-icon.png')} />
                 </TouchableOpacity>
             )}
         </ScrollView>
@@ -108,6 +109,7 @@ const CityWeatherList: React.FC<CityWeatherListProps> = ({ location }) => {
 
 const styles = StyleSheet.create({
     container: {
+        paddingTop: 5,
         flexDirection: 'column',
         width: '100%',
     },
@@ -115,25 +117,20 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
-        backgroundColor: '#ccc',
-    },
-    addButtonText: {
-        fontSize: 16,
-        color: '#000',
+        backgroundColor: 'rgba(255, 255, 255, 0.55)',
     },
     addCityContainer: {
         flexDirection: 'column',
         alignItems: 'center',
-        padding: 10,
-        backgroundColor: '#f0f0f0',
-        borderRadius: 10,
+        padding: 20,
+        backgroundColor: '#rgba(255, 255, 255, 0.55)',
     },
     input: {
         height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
+        textAlign: 'center',
+        backgroundColor: 'rgba(255, 255, 255, 0.4)',
         padding: 10,
-        width: 150,
+        width: '100%',
         marginBottom: 10,
     },
 })

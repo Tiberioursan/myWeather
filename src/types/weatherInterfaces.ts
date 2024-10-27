@@ -36,6 +36,10 @@ export interface TimeDisplayProps {
     longitude: number
 }
 
+export interface BackgroundWrapperProps {
+    children: React.ReactNode;
+}
+
 export interface GeoCoordinatesResponse {
     data?: {
         lat: string;

@@ -23,7 +23,7 @@ const TopBar: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f8f9fa',
+    backgroundColor: '#7549F2',
     alignItems: 'center',
     justifyContent: 'center',
     height: 70,
@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
+    color: 'white',
     textAlign: 'center',
   },
   backButton: {

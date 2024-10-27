@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { SafeAreaView, StyleSheet, Text } from 'react-native'
 import Toast from 'react-native-toast-message'
 import toastConfig from './src/errors/toastConfig'
 import { showErrorToast } from './src/errors/toastService'
 import TopBar from './src/components/TopBar'
 import CityWeatherList from './src/components/CityWeatherList'
 import CityDetailScreen from './src/components/CityDetailScreen'
+import BackgroundWrapper from './src/components/BackgroundWrapper'
 import useLocation from './src/hooks/useLocation'
 import { RootStackParamList, CityDetailScreenProps } from './src/types/navigationTypes'
 
@@ -23,26 +23,26 @@ const HomeScreen: React.FC = () => {
   }, [error])
 
   return (
-    <SafeAreaView style={styles.container}>
+    <BackgroundWrapper>
       <TopBar />
       {location && <CityWeatherList location={location} />}
-    </SafeAreaView>
+    </BackgroundWrapper>
   )
 }
 
 const DetailScreen: React.FC<CityDetailScreenProps> = ({ route }) => {
   return (
-    <SafeAreaView style={styles.container}>
+    <BackgroundWrapper>
       <TopBar />
       <CityDetailScreen route={route} />
-    </SafeAreaView>
+    </BackgroundWrapper>
   )
 }
 
 const AppNavigator: React.FC = () => (
   <Stack.Navigator>
-    <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-    <Stack.Screen name="CityDetail" component={DetailScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="CityDetail" component={DetailScreen} options={{ headerShown: false }} />
   </Stack.Navigator>
 )
 
@@ -54,12 +54,5 @@ const App: React.FC = () => (
     <Toast config={toastConfig} />
   </>
 )
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-})
 
 export default App

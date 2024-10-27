@@ -21,6 +21,11 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ cityData, reloadStoredLocatio
     }, [cityData.cityName, reloadStoredLocations])
 
     const handlePress = useCallback(() => {
+        if (isLongPressed) {
+            console.log('long press')
+            setIsLongPressed(false)
+            return
+        }
         navigation.navigate('CityDetail', { cityData })
     }, [cityData, navigation])
 
@@ -29,17 +34,20 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ cityData, reloadStoredLocatio
             style={[
                 styles.card,
                 isPressed && styles.cardPressed,
-                isLongPressed && styles.cardLongPressed,
                 cityData.isYourLocation && styles.yourLocationCard,
             ]}
-            onPressIn={() => {setIsPressed(true), setIsLongPressed(false)}}
+            onPressIn={() => setIsPressed(true)}
             onPressOut={() => setIsPressed(false)}
             onLongPress={handleLongPress}
             delayLongPress={400}
             onPress={handlePress}
         >
-            {cityData.isYourLocation && <Text style={styles.yourLocationText}>Your location:</Text>}
-            <View style={styles.textContainer}>
+            {cityData.isYourLocation && <Text style={styles.yourLocationText}>Your location</Text>}
+            <View style={[
+                styles.textContainer, 
+                isLongPressed && styles.cardLongPressed,
+                ]}
+            >
                 <Text style={[styles.text, isPressed && styles.textPressed, styles.cityName]}>{cityData.cityName}</Text>
                 <WeatherIcon iconCode={cityData.weather?.weatherSymbolCode || ''} size='small' />
                 <Text style={[styles.text, isPressed && styles.textPressed, styles.temperature]}>{cityData.weather?.temperature}°C</Text>
@@ -56,7 +64,7 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ cityData, reloadStoredLocatio
 const styles = StyleSheet.create({
     card: {
         padding: 30,
-        backgroundColor: '#e9ecef',
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
         alignItems: 'center',
         width: '100%',
         marginBottom: 5,
@@ -65,10 +73,11 @@ const styles = StyleSheet.create({
         paddingTop: 5,
     },
     cardPressed: {
-        backgroundColor: '#d1d1d1',
+        backgroundColor: 'rgba(255, 255, 255, 0.5)',
     },
     cardLongPressed: {
-        width: '85%',
+        width: '80%',
+        marginLeft: '-20%',
     },
     textContainer: {
         flexDirection: 'row',
@@ -83,11 +92,13 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     textPressed: {
-        color: 'black',
+        color: 'white',
         fontWeight: 'bold',
     },
     yourLocationText: {
-        fontSize: 10,
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#0C5881',
         marginBottom: 15,
     },
     cityName: {
@@ -101,7 +112,7 @@ const styles = StyleSheet.create({
     removeButton: {
         padding: 10,
         position: 'absolute',
-        right: '-33%',
+        right: '-30%',
     },
 })
 
