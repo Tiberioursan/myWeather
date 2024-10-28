@@ -8,7 +8,7 @@ Welcome to **MyWeather**, a React Native application designed to provide real-ti
 - [Getting Started](#getting-started)
 - [Running the Application](#running-the-application)
 - [Project Structure](#project-structure)
-- [Approach](#approach)
+- [Features](#features)
 - [Improvements](#improvements)
 
 
@@ -68,14 +68,14 @@ yarn android
 ## Project structure
 The project follows a standard React Native structure with the following key directories:
 
-src/: Contains the main application code.
-components/: Reusable UI components.
-api/: API calls and other services.
-hooks/: Custom hooks and helpers.
-context/: Contexts handling like SettingsContext and PopupContext
-errors/: Errors handling and showing throw a Toast configuration and service
-storage/: App storage management which contains all the storage actions
-types/: A collection of different interfaces used across the project
+- src/: Contains the main application code.
+- components/: Reusable UI components.
+- api/: API calls and other services.
+- hooks/: Custom hooks and helpers.
+- context/: Contexts handling like SettingsContext and PopupContext
+- errors/: Errors handling and showing throw a Toast configuration and service
+- storage/: App storage management which contains all the storage actions
+- types/: A collection of different interfaces used across the project
 
 
 ## Features
@@ -99,21 +99,21 @@ Users can access the settings to change the temperature units (Celsius or Fahren
 
 ## Improvements needed
 
-## Environment Variables
+### Environment Variables
 .env File: Implement a .env file for managing environment variables. Currently, one of the APIs used requires an API key which is not defined in the .env file due to time constraints.
-## Loading Process:
+### Loading Process:
 Improve the graphical handling and implementation of the loading process.
-## Toast Notifications:
+### Toast Notifications:
 Implement different types of toast notifications, such as a success toast when a new city is added to the app.
-## State Management:
+### State Management:
 Implement a store to simplify and manage complex functionalities, such as temperature unit management.
-## Error Handling:
+### Error Handling:
 Add extra error handling, for example, in cases where the weather icon image is not available.
-## TypeScript:
+### TypeScript:
 Add more type definitions to ensure better type safety and catch errors early.
-## Helper Functions:
+### Helper Functions:
 Refactor some functions into helper files to make the app more scalable and the functions globally available.
-## Some functionality:
+### Some functionality:
 - Implement a better and more solid way to retrieve a location when the user wants to add a new one (ex. using Google APIs), with autocomplete and city selector in case of multiple matchings.
 - Implement a better and more solid way to retrieve the location name in case of coordinates far from cities.
 
